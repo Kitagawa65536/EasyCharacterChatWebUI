@@ -1,0 +1,8 @@
+[submodule "SillyTavern"]
+	path = SillyTavern
+	url = https://github.com/Kitagawa65536/SillyTavern
+	branch = EasyCharacterChatWebUI
+[submodule "kokoro"]
+	path = kokoro
+	url = https://github.com/Kitagawa65536/kokoro.git
+	branch = EasyCharacterChatWebUI
