@@ -87,7 +87,12 @@
 - OpenAI互換Chat Completionsでは、Gemma系が推論欄だけで出力枠を使い切ることがあります。`show_thoughts=false` と十分な `openai_max_tokens` を維持してください。
 - 口位置の初期値は、添付画像 `2304x3072` の座標でおおよそ `x=1152`, `y=1385` を使っています。差分PNGを作るときはこの位置を基準にしてください。
 - 口差分の最終配置は `380x150` で、上下左右に少し広めの余白を残しています。輪郭線が見える場合は、まず `MouthConfig.scale` より素材の余白側を見直します。
-- `kokoro/src/avatar/avatar-view.ts` は、マウス追従の `pointer` に常時揺れを足した `Pose` をキャラ本体と口差分スプライトへ同じように適用します。この変更は `6eddfd1` でコミット済みです。
+- `kokoro/src/avatar/avatar-view.ts` は、マウス追従の `pointer` に常時揺れを足した `Pose` をキャラ本体と口差分スプライトへ同じように適用します。この変更は `6eddfd1` でコミット済みです。現在は目視調整用に `IDLE_SWAY_X=0.14` / `IDLE_SWAY_Y=0.09` へ未コミットで大きめにしています。
+- 音声連携ログは、`kokoro` のVite dev serverが `POST /kokoro/__audio-log` を受けて `kokoro/logs/audio-linkage.log` にJSON Linesで追記します。`logs` はignore対象です。
+- 2026-06-25の音声不通調査では、`avatar.init.error` が出て `avatar.speak.request` / `tts.request.start` が出ていなかったため、TTS以前にAvatar初期化が止まっていました。深度推定失敗時は `avatar.depth.fallback` を出してフォールバックPoseでReadyまで進むように未コミット修正済みです。
+- 2026-06-25のTTS 400調査では、TTSサーバが `irodori-tts-lite` のみを返しているのに、Avatar URL が `ttsModel=irodori-tts` のままだったため `Unsupported model 'irodori-tts'. Use 'irodori-tts-lite'.` になっていました。既定URL、現ユーザー設定、README類は `irodori-tts-lite` へ未コミット修正済みです。
+- `.local-work` のjunctionはTTS/LLM参照用で、`kokoro` 本体・`kokoro/public/models/character.png`・深度推定モデルの直接パスではありません。深度失敗の直接原因としては低めですが、TTSサーバ起動側の切り分けでは引き続き注意します。
+- 深度推定が失敗すると `AvatarView.init()` が `this.app.ticker.add(() => this.tick())` まで到達しないため、時間ベースの揺れが見えない原因にもなります。現在は深度Workerエラーを詳細化し、失敗してもフォールバックでticker登録まで進める方針です。
 - `SillyTavern` のReplay/パネル位置調整は `650b0823f` でコミット済みです。実行用の `data/default-user/extensions/kokoro-avatar` コピーも同内容ですが、SillyTavern側のignore対象です。
 - 親repo remoteは `https://github.com/Kitagawa65536/EasyCharacterChatWebUI.git`。`SillyTavern` と `kokoro` はどちらも `EasyCharacterChatWebUI` ブランチを指す submodule として登録済みです。
 - 親repoには Apache License 2.0 の `LICENSE` と、起動手順・CORS注意点・SillyTavern設定をまとめた `README.md` を追加済みです。
@@ -98,7 +103,10 @@
   - 2026-06-21: ChatUIから送信し、AI応答「正常に動作しています。」を表示。その後KokoroへのTTS要求も200。
   - 2026-06-21: `Replay` 未記録時の表示、Chat応答後のTTS送信、`Replay` クリック後のTTS再送をPlaywrightで確認。
   - 2026-06-21: テスト用に起動していた `kokoro` dev server `:5173` と `SillyTavern` `:8000` は停止済み。LLM `:1234` とTTS `:8088` はユーザー側サーバとして残しています。
-  - 2026-06-21: `kokoro` で `npm.cmd run build` 成功。Vite の `util` externalized 警告は既知の非ブロッキング警告です。
+  - 2026-06-25: `kokoro` で `npm.cmd run build` 成功。Vite の `util` externalized 警告は既知の非ブロッキング警告です。短時間のVite起動で `kokoro/logs/audio-linkage.log` への追記も確認済み。
+  - 2026-06-25: 深度推定フォールバック追加後、`kokoro` で `npm.cmd run build` 成功。
+  - 2026-06-25: 深度Workerの `pipeline(...)` 失敗も親側に `Depth worker failed ...` として返すように未コミット修正。次回Reload後の `audio-linkage.log` で実エラー確認が必要です。
+  - 2026-06-25: `GET http://127.0.0.1:8088/v1/models` で `irodori-tts-lite` を確認。`POST http://127.0.0.1:5173/irodori-tts/v1/audio/speech` に `model=irodori-tts-lite` を投げて `200 audio/wav` を確認。
 
 ## 次のステップの作業
 

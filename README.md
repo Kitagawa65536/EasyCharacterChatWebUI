@@ -94,7 +94,7 @@ SillyTavernの Extensions で `Kokoro Avatar` を有効化し、次を確認し�
 既定の `Avatar iframe URL`:
 
 ```text
-http://127.0.0.1:5173/kokoro/avatar.html?ttsEndpoint=/irodori-tts&ttsModel=irodori-tts&voice=codex_test_calm_girl&responseFormat=wav&characterUrl=/kokoro/models/character.png
+http://127.0.0.1:5173/kokoro/avatar.html?ttsEndpoint=/irodori-tts&ttsModel=irodori-tts-lite&voice=codex_test_calm_girl&responseFormat=wav&characterUrl=/kokoro/models/character.png
 ```
 
 LLM接続は OpenAI互換 Chat Completions 前提です。

@@ -43,7 +43,7 @@ kokoro/public/mouth/open.png
 OpenAI互換 `/v1/audio/speech` を使います。例:
 
 ```text
-http://localhost:5173/kokoro/avatar.html?ttsEndpoint=/irodori-tts&ttsModel=irodori-tts&voice=codex_test_calm_girl&responseFormat=wav
+http://localhost:5173/kokoro/avatar.html?ttsEndpoint=/irodori-tts&ttsModel=irodori-tts-lite&voice=codex_test_calm_girl&responseFormat=wav
 ```
 
 利用候補:
@@ -51,7 +51,7 @@ http://localhost:5173/kokoro/avatar.html?ttsEndpoint=/irodori-tts&ttsModel=irodo
 - `.\.local-work\Irodori-TTS_v3` 以下のTTSサーバ
   - 起動: `scripts\launch_server.bat`
   - 既定: kokoro dev serverの `/irodori-tts/v1/audio/speech` プロキシ経由で `http://127.0.0.1:8088/v1/audio/speech` へ送信
-  - パラメータ: `model=irodori-tts`, `voice=codex_test_calm_girl`, `response_format=wav`
+  - パラメータ: `model=irodori-tts-lite`, `voice=codex_test_calm_girl`, `response_format=wav`
 - `.\.local-work\llama.cpp_server` 以下のllama-swap / llama.cpp serverと設定内のggufモデルは、API確認が必要な場合に利用可能
 
 別originのTTSサーバを直接ブラウザから呼ぶため、TTSサーバ側で `http://localhost:5173` などのCORS許可が必要です。
@@ -75,7 +75,7 @@ SillyTavern/public/scripts/extensions/third-party/kokoro-avatar
 SillyTavernのExtensionsから `Kokoro Avatar` を有効化し、設定で以下を確認します。
 
 - Enable
-- Avatar iframe URL: `http://127.0.0.1:5173/kokoro/avatar.html?ttsEndpoint=/irodori-tts&ttsModel=irodori-tts&voice=codex_test_calm_girl&responseFormat=wav&characterUrl=/kokoro/models/character.png`
+- Avatar iframe URL: `http://127.0.0.1:5173/kokoro/avatar.html?ttsEndpoint=/irodori-tts&ttsModel=irodori-tts-lite&voice=codex_test_calm_girl&responseFormat=wav&characterUrl=/kokoro/models/character.png`
 - Auto speak on AI response
 - Stop current speech before new speech
 - iframe width / height
